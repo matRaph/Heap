@@ -1,9 +1,9 @@
-﻿Heap.Heap heap = new(10);
+﻿Heap.Heap heap = new(2);
 
-heap.Print();
-heap.Insert("elemento1", 5);
-heap.Print();
-heap.Insert("elemento2", 7);
-heap.Print();
-heap.Insert("elemento2", 4);
-heap.Print();
+heap.Insert("2", 2);
+heap.Insert("5", 5);
+heap.Insert("6", 6);
+heap.Insert("9", 9);
+heap.Insert("7", 7);
+heap.RemoveMin();
+heap.PrintArray();

@@ -11,15 +11,15 @@ namespace Heap
         internal class Element
         {
             public object value { get; set; }
-            public int priority { get; set; }
+            public int key { get; set; }
             public Element(object value, int priority)
             {
                 this.value = value;
-                this.priority = priority;
+                this.key = priority;
             }
 
             public override string ToString(){
-                return this.value.ToString() + ":" + this.priority.ToString();
+                return this.value.ToString() + ": " + this.key.ToString();
             }
         }
         
@@ -38,7 +38,7 @@ namespace Heap
         }
         private bool IsFull()
         {
-            return this.size == this.array.Length;
+            return this.size == this.array.Length - 1;
         }
         private void DoubleArray()
         {
@@ -52,41 +52,79 @@ namespace Heap
             {
                 DoubleArray();
             }
+            this.array[this.size + 1] = new Element(value, priority);
             this.size++;
-            this.array[this.size] = new Element(value, priority);
-            //UpHeap();
+            UpHeap();
         }
 
         public object RemoveMin()
         {
-            return 0;
+            if (IsEmpty())
+            {
+                throw new Empty_Heap_Exception("O heap está vazio");
+            }
+            object min = this.array[1].value;
+            this.array[1] = this.array[this.size];
+            this.array[this.size] = null;
+            this.size--;
+            DownHeap();
+            return min;
         }
         public object Min()
         {
-            return this.array[0];
+            return this.array[1];
         }
 
-        private void UpHeap(int priority)
+        private void UpHeap()
         {
-
-        }
-        private void DownHeap(int priority)
-        {
-
-        }
-        private void Swap(int priority, int parent)
-        {
-            Element temp = this.array[priority];
-            this.array[priority] = this.array[parent];
-            this.array[parent] = temp;
-        }
-        
-        public void Print()
-        {
-            for (int i = 0; i < this.size; i++)
+            int i = this.size;
+            while (i > 1 && this.array[i / 2].key > this.array[i].key)
             {
-                Console.WriteLine(this.array[i].value);
+                Element aux = this.array[i / 2];
+                this.array[i / 2] = this.array[i];
+                this.array[i] = aux;
+                i = i / 2;
             }
         }
+        private void DownHeap()
+        {
+            int i = 1;
+            while (2 * i <= this.size)
+            {
+                int j = 2 * i;
+                if (j < this.size && this.array[j].key > this.array[j + 1].key)
+                {
+                    j++;
+                }
+                if (this.array[i].key > this.array[j].key)
+                {
+                    Element aux = this.array[i];
+                    this.array[i] = this.array[j];
+                    this.array[j] = aux;
+                    i = j;
+                }
+                else
+                {
+                    break;
+                }
+            }
+        }
+        
+        public void PrintArray()
+        {
+            for (int i = 1; i <= this.size; i++)
+            {
+                if (this.array[i] == null)
+                {
+                    Console.WriteLine("null");
+                }
+                else
+                {
+                    Console.WriteLine(this.array[i].value);
+                }
+
+            }
+        }
+
     }
 }
